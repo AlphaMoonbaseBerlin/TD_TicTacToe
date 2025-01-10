@@ -64,10 +64,18 @@ class extGameController:
 		return len( [ cell.val for cell in self.GameBoard.cells("*", "*") if cell.val])
 
 	
+	def Test(self):
+		return [[ [(rowIndex, colIndex) for rowIndex, colIndex in zip(
+				range(0, self.GameBoard.numRows ), range(0, self.GameBoard.numCols ), 
+			)] , 
+			[(rowIndex, colIndex) for rowIndex, colIndex in zip(
+				range(0,self.GameBoard.numRows,), range(self.GameBoard.numCols-1,-1,-1 ), 
+			)]]]
 
 	@property
 	def Winner(self):
 		if self.NumTurns >= self.GameBoard.numCols * self.GameBoard.numRows : return "DRAW"
+		
 		for streak in (
 			self.GameBoard.rows() + 
 			self.GameBoard.cols() + 
@@ -75,13 +83,12 @@ class extGameController:
 				range(0, self.GameBoard.numRows ), range(0, self.GameBoard.numCols ), 
 			)] , 
 			[self.GameBoard[rowIndex, colIndex] for rowIndex, colIndex in zip(
-				range(self.GameBoard.numRows,0 ), range(self.GameBoard.numCols,0 ), 
+				range(0, self.GameBoard.numRows), range(self.GameBoard.numCols-1,-1,-1 ), 
 			)]]
 			):
 			result = Counter([cell.val for cell in streak])
-			
-			if ( result 
-	   				and len( result ) > 0 
+			if (not result) : return ""
+			if ( len( result ) > 0 
 					and list(result.values())[0] < self.GameBoard.numRows) : 
 				continue
 			
