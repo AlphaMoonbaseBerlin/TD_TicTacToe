@@ -41,13 +41,33 @@ class extGameController:
 		cell.val = value
 		return True
 	
+	def PickPlayer(self, character):
+		available = tdu.split( iop.Store.Datastore.par.Availableplayer.eval() )
+		if character in available:
+			iop.Store.Datastore.par.Availableplayer.val = " ".join([
+				f"'{item}'" for item in available if item != character
+			])
+		else:
+			iop.Store.Datastore.par.Availableplayer.val = " ".join([
+				f"'{item}'" for item in available + [character]
+			])
+
+
 	def Reset(self):
+		iop.Store.Datastore.par.Availableplayer.val = ""
 		for row in self.GameBoard.rows():
 			for cell in row:
 				cell.val = ""
 
 	@property
+	def NumTurns(self):
+		return len( [ cell.val for cell in self.GameBoard.cells("*", "*") if cell.val])
+
+	
+
+	@property
 	def Winner(self):
+		if self.NumTurns >= self.GameBoard.numCols * self.GameBoard.numRows : return "DRAW"
 		for streak in (
 			self.GameBoard.rows() + 
 			self.GameBoard.cols() + 
