@@ -1,4 +1,11 @@
 Shortcut	Operator
-Eventemitter	EventEmitter
+Emitter	EventEmitter
 Configs	Configs
 Init	Init
+Statemachine	StateMachine
+Datastore	Datastore
+Gamecontroller	Gamecontroller
+Uicontroller	UIController
+Gamedata	GameData
+Ui	UI
+Ui_items	UI_Items
