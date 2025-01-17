@@ -1,7 +1,7 @@
 '''Info Header Start
 Name : extGameController
 Author : Wieland@AMB-ZEPH15
-Saveorigin : Project.toe
+Saveorigin : TicTacToe.toe
 Saveversion : 2023.12000
 Info Header End'''
 
@@ -25,14 +25,14 @@ class extGameController:
 		return self.GameData.op("gameBoard")
 	
 	def Set(self, xIndex:int, yIndex:int):
-		if not self._set( xIndex, yIndex, iop.Store.Datastore.par.Activeplayer.eval()): 
+		if not self._set( xIndex, yIndex, iop.Store.Gamedata.par.Activeplayer.eval()): 
 			iop.Store.Emitter.Emit("InvalidGameoption", "Spot already taken.")
 			return
 		iop.Store.Emitter.Emit("Set")
 		self.nextPlayer()
 	
 	def nextPlayer(self):
-		iop.Store.Datastore.par.Activeplayer.menuIndex = (iop.Store.Datastore.par.Activeplayer.menuIndex + 1) % len( iop.Store.Datastore.par.Activeplayer.menuNames)
+		iop.Store.Gamedata.par.Activeplayer.menuIndex = (iop.Store.Gamedata.par.Activeplayer.menuIndex + 1) % len( iop.Store.Gamedata.par.Activeplayer.menuNames)
 
 
 	def _set(self, xIndex:int, yIndex:int, value:Literal["X", "O"]):
@@ -42,19 +42,19 @@ class extGameController:
 		return True
 	
 	def PickPlayer(self, character):
-		available = tdu.split( iop.Store.Datastore.par.Availableplayer.eval() )
+		available = tdu.split( iop.Store.Gamedata.par.Availableplayer.eval() )
 		if character in available:
-			iop.Store.Datastore.par.Availableplayer.val = " ".join([
+			iop.Store.Gamedata.par.Availableplayer.val = " ".join([
 				f"'{item}'" for item in available if item != character
 			])
 		else:
-			iop.Store.Datastore.par.Availableplayer.val = " ".join([
+			iop.Store.Gamedata.par.Availableplayer.val = " ".join([
 				f"'{item}'" for item in available + [character]
 			])
 
 
 	def Reset(self):
-		iop.Store.Datastore.par.Availableplayer.val = ""
+		iop.Store.Gamedata.par.Availableplayer.val = ""
 		for row in self.GameBoard.rows():
 			for cell in row:
 				cell.val = ""
@@ -74,7 +74,7 @@ class extGameController:
 
 	@property
 	def Winner(self):
-		if self.NumTurns >= self.GameBoard.numCols * self.GameBoard.numRows : return "DRAW"
+		
 		
 		for streak in (
 			self.GameBoard.rows() + 
@@ -93,5 +93,7 @@ class extGameController:
 				continue
 			
 			return list(result.keys())[0]
+		if self.NumTurns >= self.GameBoard.numCols * self.GameBoard.numRows : return "DRAW"
+		return ""
 			 
 			
