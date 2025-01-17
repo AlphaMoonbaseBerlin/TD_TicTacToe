@@ -24,14 +24,18 @@ class extGameController:
 	def GameBoard(self) -> tableDAT:
 		return self.GameData.op("gameBoard")
 	
+	@property
+	def ActivePlayer(self):
+		return self.GameData.par.Activeplayer.eval()
+
 	def Set(self, xIndex:int, yIndex:int):
 		if not self._set( xIndex, yIndex, iop.Store.Gamedata.par.Activeplayer.eval()): 
 			iop.Store.Emitter.Emit("InvalidGameoption", "Spot already taken.")
 			return
 		iop.Store.Emitter.Emit("Set")
-		self.nextPlayer()
+		self.selectNextPlayer()
 	
-	def nextPlayer(self):
+	def selectNextPlayer(self):
 		iop.Store.Gamedata.par.Activeplayer.menuIndex = (iop.Store.Gamedata.par.Activeplayer.menuIndex + 1) % len( iop.Store.Gamedata.par.Activeplayer.menuNames)
 
 
@@ -63,19 +67,8 @@ class extGameController:
 	def NumTurns(self):
 		return len( [ cell.val for cell in self.GameBoard.cells("*", "*") if cell.val])
 
-	
-	def Test(self):
-		return [[ [(rowIndex, colIndex) for rowIndex, colIndex in zip(
-				range(0, self.GameBoard.numRows ), range(0, self.GameBoard.numCols ), 
-			)] , 
-			[(rowIndex, colIndex) for rowIndex, colIndex in zip(
-				range(0,self.GameBoard.numRows,), range(self.GameBoard.numCols-1,-1,-1 ), 
-			)]]]
-
 	@property
 	def Winner(self):
-		
-		
 		for streak in (
 			self.GameBoard.rows() + 
 			self.GameBoard.cols() + 

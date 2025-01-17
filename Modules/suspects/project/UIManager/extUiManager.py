@@ -1,12 +1,13 @@
+
 '''Info Header Start
 Name : extUiController
 Author : Wieland@AMB-ZEPH15
-Saveorigin : Project.toe
+Saveorigin : TicTacToe.toe
 Saveversion : 2023.12000
 Info Header End'''
 
 
-class extUiController:
+class extUiManager:
 	"""
 	Handles the UI, stuff like state transitions and the like.
 	Has not inherent use for the beginning.
